@@ -1,0 +1,35 @@
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" href="{% static 'bootstrap.min.css' %}">
+    <script src="{% static 'bootstrap.bundle.min.js' %}"></script>
+</head>
+<body style="padding: 0; margin: 0;">
+<div style="width: 100vw; height: 100vh; display: flex; align-items: center; justify-content: center; background: linear-gradient(45deg,  #0005,#0003),url('{% static 'bg2.jpg' %}')">
+    <div class="card text-center bg-light">
+        <div class="card-header">
+            Login
+        </div>
+        <div class="card-body">
+            <form action="{% url 'users:login_done_url' %}" method="post">
+                <div class="mb-3">
+                    <label for="username" class="form-label">Email address</label>
+                    <input type="text" class="form-control" name="username" id="username" placeholder="name@example.com">
+                </div>
+                <div class="mb-3">
+                    <label for="password" class="form-label">Password</label>
+                    <input type="password" class="form-control" name="password" id="password">
+                </div>
+                <div class="mb-3">
+                    <button type="submit" class="btn btn-success">login</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>
