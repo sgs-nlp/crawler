@@ -32,35 +32,12 @@ def index_view(request: HttpRequest):
 @require_POST
 @login_required
 def changer_view(request: HttpRequest):
-    socks1 = request.POST['socks1']
-    socks2 = request.POST['socks2']
-
-    username = request.POST['username']
-    password = request.POST['password']
-
-    account_id = request.POST['account_id']
-
-    app_name = request.POST['app_name']
-    api_name = request.POST['api_name']
-    return switch(app_name, api_name, account_id)
-
-
-def switch(app_name, api_name, account_id):
-    if app_name == 'FaceBook':
-        set_cookies(cookie)
-        if api_name == 'Profile':
-            return get_profile(account=account_id)
-        if api_name == 'Friends':
-            return get_friends(account=account_id)
-        if api_name == 'Page Information':
-            return get_page_info(account=account_id)
-        if api_name == 'Group Information':
-            return get_group_info(group=account_id)
-        if api_name == 'Posts':
-            return get_posts(account=account_id)
-        if api_name == 'Photos':
-            return get_photos(account=account_id)
-        else:
-            return None
-    else:
-        return None
+    """
+    for selected true function
+    :param request:
+    :return:
+    """
+    data = dict(request.POST)
+    data['c_user'] = cookie['c_user']
+    data['xs'] = cookie['xs']
+    return facebook_switch_control(data)
