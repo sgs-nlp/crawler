@@ -1,3 +1,6 @@
+"""
+facebook.urls.py
+"""
 from django.urls import path, include
 
 app_name = 'facebook_crawler'

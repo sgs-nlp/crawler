@@ -1,20 +1,25 @@
-from django.contrib.auth.decorators import login_required
-from django.http import HttpRequest, JsonResponse
-from django.shortcuts import render, redirect
+"""
+main_app.views.py
+"""
+from django.shortcuts import render
+from django.http import HttpRequest
 from django.views.decorators.http import require_GET, require_POST
-from base_settings.models import APPLICATIONS
-from facebook_scraper import set_cookies, get_posts, get_profile, get_friends, get_page_info, get_group_info, get_photos
-from mcrawler.json_response import decorator as returner
+from django.contrib.auth.decorators import login_required
 
-cookie = {
-    'c_user': '100002423197632',
-    'xs': '44%3Ag6UTHg8W4ZdUdA%3A2%3A1634555056%3A-1%3A9726',
-}
+from base_settings.models import APPLICATIONS
+from facebook.controller import switch_controller as facebook_switch_control
+from mcrawler.json_response import decorator as returner
+from data_sample import cookie
 
 
 @require_GET
 @login_required
 def index_view(request: HttpRequest):
+    """
+
+    :param request:
+    :return: render index.html
+    """
     apps_name = APPLICATIONS.keys()
     apis_name = APPLICATIONS['FaceBook'].keys()
     return render(request, 'main_app/index.html', context={

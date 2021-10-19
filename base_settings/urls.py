@@ -1,4 +1,8 @@
+"""
+base_settings.urls.py
+"""
 from django.urls import path
+
 from base_settings.views import *
 
 app_name = 'base_settings'

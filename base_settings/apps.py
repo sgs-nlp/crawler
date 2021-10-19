@@ -1,3 +1,6 @@
+"""
+base_settings.apps.py
+"""
 from django.apps import AppConfig
 
 

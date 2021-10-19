@@ -1,3 +1,6 @@
+"""
+base_settings.models.py
+"""
 APPLICATIONS = {
     # 'None': {
     #     'None': ['None', ],
