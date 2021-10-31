@@ -29,7 +29,7 @@ def get_profile_controller(data):
     """
     account = data['account']
     set_cookies_controller(data)
-    return get_profile(account)
+    return get_profile(account[0])
 
 
 @data_cleaner_checker(['account', ])
@@ -41,7 +41,7 @@ def get_friends_controller(data):
     """
     account = data['account']
     set_cookies_controller(data)
-    return list(get_friends(account))
+    return list(get_friends(account[0]))
 
 
 @data_cleaner_checker(['account', ])
@@ -53,7 +53,7 @@ def get_page_info_controller(data):
     """
     account = data['account']
     set_cookies_controller(data)
-    return get_page_info(account)
+    return get_page_info(account[0])
 
 
 @data_cleaner_checker(['group', ])
@@ -65,7 +65,7 @@ def get_group_info_controller(data):
     """
     group = data['group']
     set_cookies_controller(data)
-    return get_group_info(group=group)
+    return get_group_info(group=group[0])
 
 
 @data_cleaner_checker(['account', ])
@@ -77,7 +77,17 @@ def get_account_posts_controller(data):
     """
     account = data['account']
     set_cookies_controller(data)
-    return list(get_posts(account=account))
+    return list(
+        get_posts(
+            account=account[0],
+            options={
+                "reactions": True,
+                "comments": True,
+                "reactors": True,
+                "comments_full": True,
+            }
+        )
+    )
 
 
 @data_cleaner_checker(['group', ])
@@ -89,7 +99,7 @@ def get_group_posts_controller(data):
     """
     group = data['group']
     set_cookies_controller(data)
-    return list(get_posts(group=group))
+    return list(get_posts(group=group[0]))
 
 
 @data_cleaner_checker(['account', ])
@@ -101,7 +111,7 @@ def get_photos_controller(data):
     """
     account = data['account']
     set_cookies_controller(data)
-    return list(get_photos(account))
+    return list(get_photos(account[0]))
 
 
 @data_cleaner_checker(['app_name', 'api_name'])
@@ -111,18 +121,18 @@ def switch_controller(data):
     :param data:
     :return:
     """
-    if data['app_name'] == 'FaceBook':
-        if data['api_name'] == 'Profile':
+    if data['app_name'] == ['FaceBook']:
+        if data['api_name'] == ['Profile']:
             return get_profile_controller(data)
-        if data['api_name'] == 'Friends':
+        if data['api_name'] == ['Friends']:
             return get_friends_controller(data)
-        if data['api_name'] == 'Page Information':
+        if data['api_name'] == ['Page Information']:
             return get_page_info_controller(data)
-        if data['api_name'] == 'Group Information':
+        if data['api_name'] == ['Group Information']:
             return get_group_info_controller(data)
-        if data['api_name'] == 'Posts':
+        if data['api_name'] == ['Posts']:
             return get_account_posts_controller(data)
-        if data['api_name'] == 'Photos':
+        if data['api_name'] == ['Photos']:
             return get_photos_controller(data)
         else:
             raise Exception('Select api.')
