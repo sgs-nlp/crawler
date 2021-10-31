@@ -1,4 +1,5 @@
 {# templates.main_app.index.html #}
+
 {% load static %}
 <html lang="en">
 <head>
@@ -14,24 +15,9 @@
     <link href="{% static 'libs/jsonTree.css' %}" rel="stylesheet"/>
     <script src="{% static 'libs/jsonTree.js' %}"></script>
 
-    <script>
-        const onSubmitClick = () => {
-            var xhr = new XMLHttpRequest();
-            xhr.open("POST", "{% url 'main_application:changer_url' %}");
-            xhr.onload = function (event) {
-                const resultItem = document.getElementById("result");
-                console.log(JSON.parse(event.target.response))
-                jsonTree.create(JSON.parse(event.target.response), resultItem);
-            };
-
-            var formData = new FormData(document.getElementById("form_id"));
-            xhr.send(formData);
-
-        }
-    </script>
     <style>
-        ul,li{
-             list-style-type: none;
+        ul, li {
+            list-style-type: none;
         }
     </style>
     <title>Document</title>
@@ -65,65 +51,138 @@
 
 <div class="container">
     <div class="row">
-        <div class="col-md-5">
-            <form id='form_id'>
-                <h1>Form</h1>
-                <div class="mb-3">
+        <form id='form_id'>
+            <h1>Form</h1>
+            <div class="row">
+                <div class="mb-3 col">
                     <label for="social" class="form-label">Social Media</label>
-                    <select class="form-select" id='social' name="app_name">
+                    <select class="form-select" id='social' name="app_name" onchange="OnChangApplication()" required>
+                        <option>
+                            None
+                        </option>
                         {% for app_name in apps_name %}
-                            <option
-                                    {% if forloop.first %}
-                                        selected {% else %}
-                                        value="{{ app_name }}" {% endif %}>{{ app_name }}</option>
+                            <option value="{{ app_name }}">{{ app_name }}</option>
                         {% endfor %}
                     </select>
                 </div>
-                <div class="mb-3">
-                    <label for="username" class="form-label">Username</label>
-                    <input type="text" class="form-control" id="username" name="username">
-                </div>
-                <div class="mb-3">
-                    <label for="password" class="form-label">Password</label>
-                    <input type="password" class="form-control" id="password" name="password">
-                </div>
-                <div class="mb-3">
+                <div class="mb-3 col">
                     <label for="api" class="form-label">API</label>
-                    <select class="form-select" id='api' name="api_name">
+                    <select disabled="true" class="form-select" id='apis_name_for_select' name="api_name"
+                            onchange="OnChangApi()"
+                            required>
+                        <option selected>
+                            None
+                        </option>
                         {% for api_name in apis_name %}
-                            <option {% if forloop.first %} selected {% else %}
-                                                           value="{{ api_name }}" {% endif %}>{{ api_name }}</option>
+                            <option value="{{ api_name }}">{{ api_name }}</option>
                         {% endfor %}
                     </select>
                 </div>
-                <div class="mb-3">
-                    <label for="account_id" class="form-label">Account ID</label>
-                    <input type="text" class="form-control" id="account_id" name="account_id">
-                </div>
-                <div class="mb-3">
-                    <label class="form-label">Sokcs IP</label>
-                    <div class="row">
-                        <div class="col"><input type="text" class="form-control" id="socks1" name="socks1"
-                                                style="width: 150%;"></div>
-                        <div class="col"><input type="text" class="form-control" id="socks2" name="socks2"
-                                                style="width: 50%; margin-right: 0%"></div>
-                    </div>
-                </div>
-                <div class="mb-3">
-                    <a class="btn btn-success" onclick="onSubmitClick()">Submit</a>
-                </div>
-            </form>
-        </div>
-        <div class="col-md-2 text-center d-flex align-items-center justify-content-center">
-            <h1>></h1>
-        </div>
-        <div class="col-md-5">
-            <h1>Result</h1>
-            <div id="result" style="height: 600px;overflow: scroll">
-
             </div>
-        </div>
+            <div class="row">
+                <div class="mb-3 col">
+                    <label for="username" class="form-label">Username</label>
+                    <input disabled="true" type="text" class="form-control" id="username" name="username" required>
+                </div>
+                <div class="mb-3 col">
+                    <label for="password" class="form-label">Password</label>
+                    <input disabled="true" type="password" class="form-control" id="password" name="password" required>
+                </div>
+            </div>
+            <div class="mb-3">
+                <label for="account" class="form-label">Account ID</label>
+                <input disabled="true" type="text" class="form-control" id="account" name="account" required>
+            </div>
+            <div class="row">
+                <div class="mb-3 col-md-9">
+                    <label class="form-label">Sokcs IP</label>
+                    <input disabled="true" type="text" class="form-control" id="socks1" name="socks1">
+                </div>
+                <div class="mb-3 col-md-3">
+                    <label class="form-label">Port</label>
+                    <input disabled="true" type="text" class="form-control" id="socks2" name="socks2">
+                </div>
+            </div>
+            <div class="mb-3">
+                <a class="btn btn-success" onclick="onSubmitClick()">Submit</a>
+            </div>
+        </form>
+        <h1>Result</h1>
+        <div id="result" style="height: 300px;overflow: scroll"></div>
     </div>
 </div>
+<script>
+    const onSubmitClick = () => {
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", "{% url 'main_application:changer_url' %}");
+        xhr.onload = function (event) {
+            const resultItem = document.getElementById("result");
+            console.log(JSON.parse(event.target.response))
+            jsonTree.create(JSON.parse(event.target.response), resultItem);
+        };
+        var formData = new FormData(document.getElementById("form_id"));
+        xhr.send(formData);
+    }
+    const OnChangApplication = () => {
+        const social = document.getElementById("social");
+        var value = social.options[social.selectedIndex].value;
+        if (value === "None") {
+            document.getElementById("apis_name_for_select").disabled = true;
+            document.getElementById("apis_name_for_select").value = 'None';
+
+            document.getElementById("username").disabled = true;
+            document.getElementById("username").value = '';
+
+            document.getElementById("password").disabled = true;
+            document.getElementById("password").value = '';
+
+            document.getElementById("account").disabled = true;
+            document.getElementById("account").value = '';
+
+            document.getElementById("socks1").disabled = true;
+            document.getElementById("socks1").value = '';
+
+            document.getElementById("socks2").disabled = true;
+            document.getElementById("socks2").value = '';
+        } else {
+            document.getElementById("apis_name_for_select").disabled = false;
+            fetch("{% url 'base_settings:app_apis_name' %}", {
+                method: 'POST',
+            })
+                .then(response => console.log(response.formData()))
+            console.log('dddddddddddddddddd')
+        }
+    }
+    const OnChangApi = () => {
+        const social = document.getElementById("apis_name_for_select");
+        var value = social.options[social.selectedIndex].value;
+        if (value === "None") {
+            document.getElementById("username").disabled = true;
+            document.getElementById("username").value = '';
+            document.getElementById("password").disabled = true;
+            document.getElementById("password").value = '';
+            document.getElementById("account").disabled = true;
+            document.getElementById("account").value = '';
+            document.getElementById("socks1").disabled = true;
+            document.getElementById("socks1").value = '';
+            document.getElementById("socks2").disabled = true;
+            document.getElementById("socks2").value = '';
+
+        } else {
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", "{% url 'base_settings:app_apis_name' %}");
+            xhr.onload = function (event) {
+                document.getElementById("username").disabled = false;
+                document.getElementById("password").disabled = false;
+                document.getElementById("account").disabled = false;
+                document.getElementById("socks1").disabled = false;
+                document.getElementById("socks2").disabled = false;
+            };
+
+            var formData = new FormData(document.getElementById("form_id"));
+            xhr.send(formData);
+        }
+    }
+</script>
 </body>
 </html>
