@@ -6,7 +6,6 @@ APPLICATIONS = {
     #     'None': ['None', ],
     # },
     'FaceBook': {
-        'None': ['None', ],
         'Profile': ['Account', ],
         'Friends': ['Account', ],
         'Page Information': ['Account', ],

@@ -22,8 +22,8 @@ def get_all_application_api_name(request: HttpRequest):
     :param request:
     :return:
     """
-    app_name = request.POST['app_name']
-    apis_name = APPLICATIONS[app_name].keys()
+    # app_name = request.POST['app_name']
+    apis_name = APPLICATIONS['FaceBook'].keys()
     return JsonResponse({'apis_name': apis_name})
 
 
